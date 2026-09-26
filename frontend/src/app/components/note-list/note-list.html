@@ -1,0 +1,22 @@
+<div class="note-list-container">
+  <div class="header">
+    <h1>My Notes</h1>
+    <button (click)="goToCreate()">+ New Note</button>
+  </div>
+
+  @if (notes().length === 0) {
+    <p class="empty-state">No notes yet. Create your first one!</p>
+  } @else {
+    <div class="notes-grid">
+      @for (note of notes(); track note.id) {
+        <div class="note-card" (click)="goToEdit(note.id!)">
+          <h3>{{ note.title }}</h3>
+          <p>{{ note.content }}</p>
+          <button class="delete-btn" (click)="deleteNote(note.id!); $event.stopPropagation()">
+            Delete
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

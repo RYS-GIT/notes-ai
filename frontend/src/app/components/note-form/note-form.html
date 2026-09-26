@@ -1,0 +1,29 @@
+<div class="note-form-container">
+  <h1>{{ isEditMode() ? 'Edit Note' : 'New Note' }}</h1>
+
+  <form (ngSubmit)="save()">
+    <label for="title">Title</label>
+    <input
+      id="title"
+      type="text"
+      [ngModel]="title()"
+      (ngModelChange)="title.set($event)"
+      name="title"
+      required
+    />
+
+    <label for="content">Content</label>
+    <textarea
+      id="content"
+      [ngModel]="content()"
+      (ngModelChange)="content.set($event)"
+      name="content"
+      rows="10"
+    ></textarea>
+
+    <div class="actions">
+      <button type="submit">Save</button>
+      <button type="button" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>
