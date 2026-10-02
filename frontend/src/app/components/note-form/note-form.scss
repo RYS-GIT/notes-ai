@@ -64,3 +64,123 @@ input, textarea {
     }
   }
 }
+
+.ai-tools {
+  margin-top: 2rem;
+  background: white;
+  padding: 1.75rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.25rem;
+  }
+
+  .hint {
+    margin: 0 0 1rem;
+    color: #6b7280;
+    font-size: 0.85rem;
+  }
+}
+
+.ai-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  button {
+    background-color: #7c3aed;
+    color: white;
+    padding: 0.6rem 1.1rem;
+    font-weight: 600;
+
+    &:hover:not(:disabled) {
+      background-color: #6d28d9;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.ai-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.summary {
+  background: #f5f3ff;
+  border-left: 4px solid #7c3aed;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.quiz h3 {
+  font-size: 1.1rem;
+}
+
+.quiz-question {
+  margin-bottom: 1.5rem;
+
+  .q-text {
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: #f3f4f6;
+  color: #1a1a1a;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.4rem;
+  border: 1px solid transparent;
+
+  &:hover:not(:disabled) {
+    background: #e5e7eb;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &.correct {
+    background: #dcfce7;
+    border-color: #16a34a;
+  }
+
+  &.wrong {
+    background: #fee2e2;
+    border-color: #dc2626;
+  }
+}
+
+.explanation {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin: 0.4rem 0 0;
+}
+
+.score {
+  font-weight: 700;
+  font-size: 1.05rem;
+}

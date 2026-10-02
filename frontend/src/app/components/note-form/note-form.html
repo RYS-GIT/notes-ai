@@ -26,4 +26,59 @@
       <button type="button" (click)="cancel()">Cancel</button>
     </div>
   </form>
+
+  @if (isEditMode()) {
+    <div class="ai-tools">
+      <h2>AI Tools</h2>
+      <p class="hint">These work on the saved version of the note, so save any edits first.</p>
+
+      <div class="ai-actions">
+        <button type="button" (click)="summarize()" [disabled]="summaryLoading() || quizLoading()">
+          {{ summaryLoading() ? 'Summarizing…' : 'Summarize' }}
+        </button>
+        <button type="button" (click)="generateQuiz()" [disabled]="summaryLoading() || quizLoading()">
+          {{ quizLoading() ? 'Generating quiz…' : 'Generate Quiz' }}
+        </button>
+      </div>
+
+      @if (aiError()) {
+        <div class="ai-error">{{ aiError() }}</div>
+      }
+
+      @if (summary()) {
+        <div class="summary">
+          <h3>Summary</h3>
+          <p>{{ summary() }}</p>
+        </div>
+      }
+
+      @if (quiz().length > 0) {
+        <div class="quiz">
+          <h3>Quiz</h3>
+          @for (q of quiz(); track $index; let qi = $index) {
+            <div class="quiz-question">
+              <p class="q-text">{{ qi + 1 }}. {{ q.question }}</p>
+              @for (opt of q.options; track $index; let oi = $index) {
+                <button
+                  type="button"
+                  class="option"
+                  [class]="'option ' + optionClass(qi, oi)"
+                  [disabled]="answers()[qi] !== undefined"
+                  (click)="pick(qi, oi)"
+                >
+                  {{ opt }}
+                </button>
+              }
+              @if (answers()[qi] !== undefined) {
+                <p class="explanation">{{ q.explanation }}</p>
+              }
+            </div>
+          }
+          @if (allAnswered()) {
+            <p class="score">Score: {{ score() }} / {{ quiz().length }}</p>
+          }
+        </div>
+      }
+    </div>
+  }
 </div>

@@ -1,5 +1,7 @@
 package com.notesai.backend.note;
 
+import com.notesai.backend.ai.AiService;
+import com.notesai.backend.ai.QuizQuestion;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,11 @@ import java.util.List;
 public class NoteController {
 
     private final NoteService noteService;
+    private final AiService aiService;
 
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, AiService aiService) {
         this.noteService = noteService;
+        this.aiService = aiService;
     }
 
     @GetMapping
@@ -42,5 +46,21 @@ public class NoteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteNote(@PathVariable Long id) {
         noteService.deleteNote(id);
+    }
+
+    @PostMapping("/{id}/summarize")
+    public java.util.Map<String, String> summarizeNote(@PathVariable Long id) {
+        Note note = noteService.getNoteById(id);
+        String summary = aiService.summarize(note.getContent());
+        return java.util.Map.of("summary", summary);
+    }
+
+    @PostMapping("/{id}/quiz")
+    public List<QuizQuestion> generateQuiz(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "5") int count) {
+        Note note = noteService.getNoteById(id);
+        int safeCount = Math.max(1, Math.min(count, 10));
+        return aiService.generateQuiz(note.getContent(), safeCount);
     }
 }

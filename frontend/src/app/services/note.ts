@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Note } from '../models/note.model';
+import { QuizQuestion } from '../models/quiz.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,13 @@ export class NoteService {
 
   deleteNote(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  summarizeNote(id: number): Observable<{ summary: string }> {
+    return this.http.post<{ summary: string }>(`${this.baseUrl}/${id}/summarize`, {});
+  }
+
+  generateQuiz(id: number, count = 5): Observable<QuizQuestion[]> {
+    return this.http.post<QuizQuestion[]>(`${this.baseUrl}/${id}/quiz`, {}, { params: { count } });
   }
 }
