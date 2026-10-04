@@ -1,0 +1,34 @@
+<div class="chat-container">
+  <h1>Chat with your notes</h1>
+
+  <div class="messages">
+    @if (messages().length === 0) {
+      <p class="empty-state">Ask a question about anything in your notes.</p>
+    }
+    @for (msg of messages(); track $index) {
+      <div class="message" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'">
+        <p>{{ msg.text }}</p>
+        @if (msg.sourceNoteIds && msg.sourceNoteIds.length > 0) {
+          <p class="sources">Based on notes: {{ msg.sourceNoteIds.join(', ') }}</p>
+        }
+      </div>
+    }
+    @if (loading()) {
+      <div class="message assistant">
+        <p class="thinking">Thinking…</p>
+      </div>
+    }
+  </div>
+
+  <form (ngSubmit)="ask()" class="input-row">
+    <input
+      type="text"
+      [ngModel]="question()"
+      (ngModelChange)="question.set($event)"
+      name="question"
+      placeholder="Ask a question about your notes…"
+      [disabled]="loading()"
+    />
+    <button type="submit" [disabled]="loading() || !question().trim()">Ask</button>
+  </form>
+</div>

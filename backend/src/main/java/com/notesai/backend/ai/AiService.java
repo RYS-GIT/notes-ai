@@ -89,4 +89,42 @@ public class AiService {
             throw new AiResponseException("Could not parse quiz from AI response", e);
         }
     }
+
+    public float[] embed(String text) {
+        EmbeddingResponse response = restClient.post()
+                .uri("/models/gemini-embedding-001:embedContent?key={key}", apiKey)
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .body(EmbeddingRequest.of(text))
+                .retrieve()
+                .body(EmbeddingResponse.class);
+
+        if (response == null || response.embedding() == null) {
+            throw new AiResponseException("Empty embedding response", null);
+        }
+
+        List<Float> values = response.embedding().values();
+        float[] result = new float[values.size()];
+        for (int i = 0; i < values.size(); i++) {
+            result[i] = values.get(i);
+        }
+        return result;
+    }
+
+    public String answerFromContext(String question, List<String> contextTexts) {
+        String context = String.join("\n\n---\n\n", contextTexts);
+
+        String prompt = """
+            Answer the question using ONLY the information in the notes below.
+            If the notes don't contain enough information to answer, say so clearly
+            rather than guessing.
+
+            NOTES:
+            %s
+
+            QUESTION:
+            %s
+            """.formatted(context, question);
+
+        return callGemini(GeminiRequest.of(prompt));
+    }
 }

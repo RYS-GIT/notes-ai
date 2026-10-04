@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { NoteList } from './note-list';
 
 describe('NoteList', () => {
@@ -8,11 +9,12 @@ describe('NoteList', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NoteList],
+      providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NoteList);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

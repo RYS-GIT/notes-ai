@@ -88,3 +88,19 @@
     background-color: #fee2e2;
   }
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chat-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
