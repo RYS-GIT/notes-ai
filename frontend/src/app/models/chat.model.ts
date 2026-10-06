@@ -1,3 +1,8 @@
+export interface ChatTurn {
+  role: 'user' | 'assistant';
+  text: string;
+}
+
 export interface ChatMessage {
   role: 'user' | 'assistant';
   text: string;

@@ -28,6 +28,9 @@ export class NoteList implements OnInit {
   }
 
   deleteNote(id: number): void {
+    if (!confirm('Delete this note? This cannot be undone.')) {
+      return;
+    }
     this.noteService.deleteNote(id).subscribe({
       next: () => this.loadNotes(),
       error: (err) => console.error('Failed to delete note', err)

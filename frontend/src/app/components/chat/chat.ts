@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NoteService } from '../../services/note';
-import { ChatMessage } from '../../models/chat.model';
+import { ChatMessage, ChatTurn } from '../../models/chat.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './chat.html',
   styleUrl: './chat.scss'
 })
@@ -24,7 +25,9 @@ export class Chat {
     this.question.set('');
     this.loading.set(true);
 
-    this.noteService.askChat(q).subscribe({
+    const history: ChatTurn[] = this.messages().map((m) => ({ role: m.role, text: m.text }));
+
+    this.noteService.askChat(q, history).subscribe({
       next: (res) => {
         this.messages.update((m) => [
           ...m,

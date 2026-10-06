@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Note } from '../models/note.model';
 import { QuizQuestion } from '../models/quiz.model';
-import { ChatResponse } from '../models/chat.model';
+import { ChatResponse, ChatTurn } from '../models/chat.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +40,7 @@ export class NoteService {
     return this.http.post<QuizQuestion[]>(`${this.baseUrl}/${id}/quiz`, {}, { params: { count } });
   }
 
-  askChat(question: string): Observable<ChatResponse> {
-    return this.http.post<ChatResponse>('http://localhost:8080/api/chat', { question });
+  askChat(question: string, history: ChatTurn[]): Observable<ChatResponse> {
+    return this.http.post<ChatResponse>('http://localhost:8080/api/chat', { question, history });
   }
 }

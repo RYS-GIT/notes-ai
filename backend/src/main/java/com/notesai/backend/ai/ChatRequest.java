@@ -1,3 +1,7 @@
 package com.notesai.backend.ai;
 
-public record ChatRequest(String question) {}
+import java.util.List;
+
+public record ChatRequest(String question, List<ChatTurn> history) {
+    public record ChatTurn(String role, String text) {}
+}

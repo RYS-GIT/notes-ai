@@ -34,7 +34,7 @@ public class AiController {
                 .map(n -> n.getTitle() + "\n" + n.getContent())
                 .toList();
 
-        String answer = aiService.answerFromContext(request.question(), contextTexts);
+        String answer = aiService.answerFromContext(request.question(), contextTexts, request.history());
 
         return new ChatResponse(answer, matchingIds);
     }

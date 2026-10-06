@@ -110,20 +110,39 @@ public class AiService {
         return result;
     }
 
-    public String answerFromContext(String question, List<String> contextTexts) {
+    public String answerFromContext(String question, List<String> contextTexts, List<ChatRequest.ChatTurn> history) {
         String context = String.join("\n\n---\n\n", contextTexts);
 
+        String historyBlock = "";
+        if (history != null && !history.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (ChatRequest.ChatTurn turn : history) {
+                sb.append(turn.role().equals("user") ? "User: " : "Assistant: ")
+                        .append(turn.text())
+                        .append("\n");
+            }
+            historyBlock = "\nPREVIOUS CONVERSATION:\n" + sb + "\n";
+        }
+
         String prompt = """
-            Answer the question using ONLY the information in the notes below.
-            If the notes don't contain enough information to answer, say so clearly
-            rather than guessing.
+        You are a helpful assistant answering questions in an ongoing conversation
+        about the user's notes.
 
-            NOTES:
-            %s
+        There are two kinds of questions you might get:
+        1. Questions about the CONTENT of the notes (e.g. "what is X", "tell me about Y").
+           For these, answer using ONLY the information in the NOTES section below.
+           If the notes don't contain enough information, say so clearly rather than guessing.
+        2. Questions about the CONVERSATION ITSELF (e.g. "what did I ask first",
+           "can you repeat that", "what did you just say"). For these, answer directly
+           using the PREVIOUS CONVERSATION section below — you do not need the notes
+           to answer these.
+        %s
+        NOTES:
+        %s
 
-            QUESTION:
-            %s
-            """.formatted(context, question);
+        QUESTION:
+        %s
+        """.formatted(historyBlock, context, question);
 
         return callGemini(GeminiRequest.of(prompt));
     }
