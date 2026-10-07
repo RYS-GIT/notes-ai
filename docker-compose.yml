@@ -20,6 +20,8 @@ services:
       DB_PASSWORD: notesai
       FRONTEND_URL: http://localhost:4200
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      APP_USERNAME: ${APP_USERNAME}
+      APP_PASSWORD: ${APP_PASSWORD}
     depends_on:
       - postgres
 

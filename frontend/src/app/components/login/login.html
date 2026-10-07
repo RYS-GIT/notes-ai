@@ -1,0 +1,27 @@
+<div class="login-container">
+  <form (ngSubmit)="submit()">
+    <h1>Sign in</h1>
+    <input
+      type="text"
+      placeholder="Username"
+      [ngModel]="username()"
+      (ngModelChange)="username.set($event)"
+      name="username"
+      autocomplete="username"
+    />
+    <input
+      type="password"
+      placeholder="Password"
+      [ngModel]="password()"
+      (ngModelChange)="password.set($event)"
+      name="password"
+      autocomplete="current-password"
+    />
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+    <button type="submit" [disabled]="checking()">
+      {{ checking() ? 'Signing in…' : 'Sign in' }}
+    </button>
+  </form>
+</div>

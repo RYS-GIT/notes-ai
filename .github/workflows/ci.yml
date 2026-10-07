@@ -45,6 +45,8 @@ jobs:
           DB_USER: notesai
           DB_PASSWORD: notesai
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          APP_USERNAME: ${{ secrets.APP_USERNAME }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
 
   frontend:
     name: Frontend Build & Test
