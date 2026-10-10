@@ -15,7 +15,7 @@ export class AuthService {
     const encoded = btoa(`${username}:${password}`);
     // Verify the credentials actually work by hitting a real endpoint
     return this.http
-      .get('http://localhost:8080/api/notes', {
+      .get('/api/notes', {
         headers: { Authorization: `Basic ${encoded}` }
       })
       .pipe(

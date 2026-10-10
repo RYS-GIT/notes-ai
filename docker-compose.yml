@@ -1,24 +1,22 @@
 services:
   postgres:
     image: pgvector/pgvector:pg16
+    restart: unless-stopped
     environment:
       POSTGRES_DB: notesai
       POSTGRES_USER: notesai
       POSTGRES_PASSWORD: notesai
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
     build: ./backend
-    ports:
-      - "8080:8080"
+    restart: unless-stopped
     environment:
       DB_HOST: postgres
       DB_USER: notesai
       DB_PASSWORD: notesai
-      FRONTEND_URL: http://localhost:4200
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:4200}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       APP_USERNAME: ${APP_USERNAME}
       APP_PASSWORD: ${APP_PASSWORD}
@@ -27,8 +25,9 @@ services:
 
   frontend:
     build: ./frontend
+    restart: unless-stopped
     ports:
-      - "4200:80"
+      - "${FRONTEND_PORT:-4200}:80"
     depends_on:
       - backend
 

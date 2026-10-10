@@ -10,7 +10,7 @@ import { ChatResponse, ChatTurn } from '../models/chat.model';
 })
 export class NoteService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/notes';
+  private baseUrl = '/api/notes';
 
   getAllNotes(): Observable<Note[]> {
     return this.http.get<Note[]>(this.baseUrl);
@@ -41,6 +41,6 @@ export class NoteService {
   }
 
   askChat(question: string, history: ChatTurn[]): Observable<ChatResponse> {
-    return this.http.post<ChatResponse>('http://localhost:8080/api/chat', { question, history });
+    return this.http.post<ChatResponse>('/api/chat', { question, history });
   }
 }
