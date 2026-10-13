@@ -1,10 +1,7 @@
 <div class="note-list-container">
   <div class="header">
     <h1>My Notes</h1>
-    <div class="header-actions">
-      <a routerLink="/chat" class="chat-link">💬 Chat with notes</a>
-      <button (click)="goToCreate()">+ New Note</button>
-    </div>
+    <button (click)="goToCreate()">+ New Note</button>
   </div>
 
   @if (notes().length === 0) {

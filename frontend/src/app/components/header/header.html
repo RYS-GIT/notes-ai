@@ -1,0 +1,11 @@
+<header class="app-header">
+  <a routerLink="/notes" class="brand">
+    <img src="logo.svg" alt="" width="32" height="32" />
+    <span>NotesAI</span>
+  </a>
+  <nav>
+    <a routerLink="/notes" routerLinkActive="active">Notes</a>
+    <a routerLink="/chat" routerLinkActive="active">Chat</a>
+    <button type="button" class="logout" (click)="logout()">Log out</button>
+  </nav>
+</header>

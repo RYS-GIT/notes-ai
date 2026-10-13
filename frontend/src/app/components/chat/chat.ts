@@ -2,11 +2,10 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NoteService } from '../../services/note';
 import { ChatMessage, ChatTurn } from '../../models/chat.model';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   templateUrl: './chat.html',
   styleUrl: './chat.scss'
 })
