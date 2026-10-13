@@ -13,6 +13,8 @@ public class NoteService {
     private final AiService aiService;
     private final EmbeddingRepository embeddingRepository;
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(NoteService.class);
+
     public NoteService(NoteRepository noteRepository, AiService aiService, EmbeddingRepository embeddingRepository) {
         this.noteRepository = noteRepository;
         this.aiService = aiService;
@@ -51,9 +53,13 @@ public class NoteService {
     }
 
     private void storeEmbedding(Note note) {
-        String text = note.getTitle() + "\n\n" + note.getContent();
-        float[] embedding = aiService.embed(text);
-        embeddingRepository.save(note.getId(), embedding);
+        try {
+            String text = note.getTitle() + "\n\n" + note.getContent();
+            float[] embedding = aiService.embed(text);
+            embeddingRepository.save(note.getId(), embedding);
+        } catch (RuntimeException e) {
+            log.warn("Could not store embedding for note {}: {}", note.getId(), e.getMessage());
+        }
     }
 
     public List<Note> getNotesByIds(List<Long> ids) {

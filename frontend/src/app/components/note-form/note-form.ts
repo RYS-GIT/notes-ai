@@ -20,6 +20,8 @@ export class NoteForm implements OnInit {
   title = signal('');
   content = signal('');
   isEditMode = signal(false);
+  saving = signal(false);
+  saveError = signal<string | null>(null);
 
   // AI state
   summary = signal<string | null>(null);
@@ -53,19 +55,23 @@ export class NoteForm implements OnInit {
   }
 
   save(): void {
-    const note: Note = { title: this.title(), content: this.content() };
+    if (this.saving()) return;
+    this.saving.set(true);
+    this.saveError.set(null);
 
-    if (this.isEditMode() && this.noteId() !== null) {
-      this.noteService.updateNote(this.noteId()!, note).subscribe({
-        next: () => this.router.navigate(['/notes']),
-        error: (err) => console.error('Failed to update note', err)
-      });
-    } else {
-      this.noteService.createNote(note).subscribe({
-        next: () => this.router.navigate(['/notes']),
-        error: (err) => console.error('Failed to create note', err)
-      });
-    }
+    const note: Note = { title: this.title(), content: this.content() };
+    const request$ =
+      this.isEditMode() && this.noteId() !== null
+        ? this.noteService.updateNote(this.noteId()!, note)
+        : this.noteService.createNote(note);
+
+    request$.subscribe({
+      next: () => this.router.navigate(['/notes']),
+      error: (err) => {
+        this.saving.set(false);
+        this.saveError.set(err.error?.message ?? 'Could not save the note. Please try again.');
+      }
+    });
   }
 
   cancel(): void {

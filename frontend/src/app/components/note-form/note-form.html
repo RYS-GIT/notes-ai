@@ -21,9 +21,15 @@
       rows="10"
     ></textarea>
 
+    @if (saveError()) {
+      <p class="save-error">{{ saveError() }}</p>
+    }
+
     <div class="actions">
-      <button type="submit">Save</button>
-      <button type="button" (click)="cancel()">Cancel</button>
+      <button type="submit" [disabled]="saving()">
+        {{ saving() ? 'Saving…' : 'Save' }}
+      </button>
+      <button type="button" (click)="cancel()" [disabled]="saving()">Cancel</button>
     </div>
   </form>
 

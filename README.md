@@ -161,6 +161,7 @@ The same Docker Compose stack runs on a single EC2 instance (Ubuntu 24.04, `t3.s
 - **Same-origin API through nginx:** avoids hard-coding backend URLs in the frontend, removes most CORS complexity, and keeps the backend off the public network.
 - **pgvector with `JdbcTemplate`:** vector storage and similarity queries use plain SQL, because JPA's support for the `vector` type is still limited. Everything else uses JPA.
 - **Resilient AI calls:** server errors from the Gemini API are retried up to three times with exponential backoff, and failures are translated into clean 502 or 503 responses.
+- **Duplicate-save protection:** the Save button is disabled while a request is in flight, because saving waits for the embedding call and a double click used to create two notes.
 - **Prompt design:** a single "answer only from the notes" rule blocked questions about the conversation itself. Splitting the instructions into two cases fixed it.
 - **Configuration through environment variables:** database credentials, the API key, and the login are never in the code.
 
@@ -169,6 +170,7 @@ The same Docker Compose stack runs on a single EC2 instance (Ubuntu 24.04, `t3.s
 - **One shared login,** not per-user accounts. A multi-user version would add a users table, per-user notes, and JWT or session authentication.
 - **No HTTPS in the demo deployment.** HTTP Basic credentials need HTTPS on a public site. Caddy with Let's Encrypt would be the next step.
 - **Embeddings are generated synchronously on save,** so saving a note waits for an extra API call. A production version would do this in the background.
+- **If the embedding call fails when a note is saved,** the note is still saved but won't appear in chat answers until it is saved again. A background job to backfill missing embeddings would fix this.
 - **The database schema is created by Hibernate** (`ddl-auto=update`). A migration tool such as Flyway would be the production choice.
 - **Chat retrieval uses only the latest question.** Rewriting the question with the conversation history before embedding it would improve follow-up questions.
 - **The Gemini free tier has daily quotas,** so heavy use can lead to rate-limit errors.
